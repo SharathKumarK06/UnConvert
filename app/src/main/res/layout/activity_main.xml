@@ -59,6 +59,26 @@
         app:layout_constraintStart_toEndOf="@+id/tvFrom"
         app:layout_constraintTop_toTopOf="@+id/tvFrom" />
 
+    <Spinner
+        android:id="@+id/spinnerFrom"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="13dp"
+        app:layout_constraintEnd_toStartOf="@+id/spinnerTo"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvFrom" />
+
+    <Spinner
+        android:id="@+id/spinnerTo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="@+id/spinnerFrom"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/spinnerFrom"
+        app:layout_constraintTop_toTopOf="@+id/spinnerFrom" />
+
     <EditText
         android:id="@+id/etFrom"
         android:layout_width="wrap_content"
@@ -85,16 +105,6 @@
         app:layout_constraintStart_toEndOf="@+id/etFrom"
         app:layout_constraintTop_toTopOf="@+id/etFrom" />
 
-    <Spinner
-        android:id="@+id/spinnerFrom"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="13dp"
-        app:layout_constraintEnd_toStartOf="@+id/spinnerTo"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvFrom" />
-
     <Button
         android:id="@+id/btnCalculate"
         android:layout_width="wrap_content"
@@ -104,15 +114,5 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/etFrom" />
-
-    <Spinner
-        android:id="@+id/spinnerTo"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="@+id/spinnerFrom"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/spinnerFrom"
-        app:layout_constraintTop_toTopOf="@+id/spinnerFrom" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
