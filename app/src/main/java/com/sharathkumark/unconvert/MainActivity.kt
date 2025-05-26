@@ -1,8 +1,10 @@
 package com.sharathkumark.unconvert
 
 import android.os.Bundle
+import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.EditText
+import android.widget.Spinner
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
@@ -23,21 +25,19 @@ class MainActivity : AppCompatActivity() {
             insets
         }
 
-        val etWeightKgs = findViewById<EditText>(R.id.etWeightKgs)
-        val tvWeightPounds = findViewById<TextView>(R.id.tvWeightPounds)
-        val btnCalculate = findViewById<Button>(R.id.btnCalculate)
-
-        btnCalculate.setOnClickListener {
-            var weight = etWeightKgs.text.toString().toDoubleOrNull()
-            weight = weight?.times(2.205)
-            if (weight != null) {
-                tvWeightPounds.text = "Equivalent weight in pounds is " + weight.toString()
-            }
-            else {
-                tvWeightPounds.text = ""
-                Toast.makeText(this, "Enter a valid value of weight!", Toast.LENGTH_SHORT).show()
-            }
+        // Create spinner
+        val spinner: Spinner = findViewById(R.id.spinnerQuantity)
+        // Create an ArrayAdapter using the string array and a default spinner layout.
+        ArrayAdapter.createFromResource(
+            this,
+            R.array.spinnerQuantity,
+            android.R.layout.simple_spinner_item
+        ).also {
+            adapter ->
+            // Specify the layout to use when the list of choices appears.
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+            // Apply the adapter to the spinner.
+            spinner.adapter = adapter
         }
-
     }
 }
