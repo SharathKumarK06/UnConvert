@@ -6,13 +6,4 @@
     <string name="from_hint">Enter value</string>
     <string name="to_hint">Enter value</string>
     <string name="calculate_btn">Calculate</string>
-    <string-array name="spinnerQuantity">
-        <item>Length</item>
-        <item>Time</item>
-        <item>Mass</item>
-    </string-array>
-    <string-array name="spinnerFrom">
-    </string-array>
-    <string-array name="spinnerTo">
-    </string-array>
 </resources>
