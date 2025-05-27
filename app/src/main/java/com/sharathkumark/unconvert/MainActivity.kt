@@ -51,7 +51,7 @@ class MainActivity : AppCompatActivity() {
         val spinnerTo: Spinner = findViewById(R.id.spinnerTo)
         lateinit var spinnerFromAdapter: ArrayAdapter<String>
         lateinit var spinnerToAdapter: ArrayAdapter<String>
-        lateinit var units: List<String>
+        lateinit var units: MutableList<String>
 
         // Create an ArrayAdapter using the string array and a default spinnerDimensions layout.
         ArrayAdapter(
@@ -64,24 +64,19 @@ class MainActivity : AppCompatActivity() {
             spinnerDimensions.adapter = adapter
         }
 
-        // TODO("Disable spinnerFrom and spinnerTo until the spinnerDimensions is selected")
-        // TODO("Meaning, by default, both are enabled")
         // TODO("store default unit and spinner id as a pair in unit so other spinner can see")
 
-        // specify the interface implementation of onItemSelectListener
         // onItemSelectedListener for spinnerDimensions
         spinnerDimensions.onItemSelectedListener = object: AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, pos: Int, id: Long) {
                 // get dimensions
                 val dimensions = dimensions_table[parent?.getItemAtPosition(pos)]!!
-                // get only units
-                val units = dimensions.keys.toList()
+                units = dimensions.keys.toMutableList()
 
                 // ArrayAdapter for spinnerFrom
                 spinnerFromAdapter = ArrayAdapter(
                     applicationContext,
                     android.R.layout.simple_spinner_item,
-                    units
                 )
                 spinnerFromAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
                 spinnerFrom.adapter = spinnerFromAdapter
@@ -90,7 +85,7 @@ class MainActivity : AppCompatActivity() {
                 spinnerToAdapter = ArrayAdapter(
                     applicationContext,
                     android.R.layout.simple_spinner_item,
-                    units
+                    dimensions.keys.toMutableList()
                 )
                 spinnerToAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
                 spinnerTo.adapter = spinnerToAdapter
@@ -101,18 +96,20 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        lateinit var value: String
         // onItemSelectedListener for spinnerFrom
         spinnerFrom.onItemSelectedListener = object: AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, pos: Int, id: Long) {
-                val item = spinnerToAdapter.getItem(pos)!!
-//                for (i in 0..<spinnerFromAdapter.count) {
-//                    Log.v(TAG, "Inside spinnerFrom, Item: ${spinnerFromAdapter.getItem(i)}")
-//                }
-//                spinnerToAdapter.remove(item)
-                Log.v(TAG, "Inside spinnerFrom, Item: ${parent?.selectedItem}")
-                value = parent?.selectedItem.toString()
-                Log.v(TAG, "Inside spinnerFrom, value: ${value}")
+                // Clear list and re add all units
+                spinnerToAdapter.clear()
+                spinnerToAdapter.addAll(units)
+
+                val unit = parent?.selectedItem
+                spinnerToAdapter.remove(unit.toString())
+
+                for (i in 0..<spinnerToAdapter.count) {
+                    Log.v(TAG, "Inside spinnerFrom From, Items: ${spinnerFromAdapter.getItem(i)}")
+                    Log.v(TAG, "Inside spinnerFrom To, Items: ${spinnerToAdapter.getItem(i)}")
+                }
             }
 
             override fun onNothingSelected(parent: AdapterView<*>?) {
@@ -123,12 +120,17 @@ class MainActivity : AppCompatActivity() {
         // onItemSelectedListener for spinnerTo
         spinnerTo.onItemSelectedListener = object: AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, pos: Int, id: Long) {
-//                for (i in 0..<spinnerFromAdapter.count) {
-////                    units.add(spinnerFromAdapter.getItem(i).toString())
-//                    Log.v(TAG, "Inside spinnerFrom, Item: ${spinnerFromAdapter.getItem(i)}")
-//                }
-//                spinnerFromAdapter.remove(item)
-                Log.v(TAG, "Inside spinnerTo, value: ${value}")
+                // Clear list and re add all units
+                spinnerFromAdapter.clear()
+                spinnerFromAdapter.addAll(units)
+
+                val unit = parent?.selectedItem
+                spinnerFromAdapter.remove(unit.toString())
+
+                for (i in 0..<spinnerFromAdapter.count) {
+                    Log.v(TAG, "Inside spinnerTo To, Items: ${spinnerToAdapter.getItem(i)}")
+                    Log.v(TAG, "Inside spinnerTo From, Items: ${spinnerFromAdapter.getItem(i)}")
+                }
             }
 
             override fun onNothingSelected(parent: AdapterView<*>?) {
