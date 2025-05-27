@@ -105,11 +105,6 @@ class MainActivity : AppCompatActivity() {
 
                 val unit = parent?.selectedItem
                 spinnerToAdapter.remove(unit.toString())
-
-                for (i in 0..<spinnerToAdapter.count) {
-                    Log.v(TAG, "Inside spinnerFrom From, Items: ${spinnerFromAdapter.getItem(i)}")
-                    Log.v(TAG, "Inside spinnerFrom To, Items: ${spinnerToAdapter.getItem(i)}")
-                }
             }
 
             override fun onNothingSelected(parent: AdapterView<*>?) {
@@ -126,11 +121,6 @@ class MainActivity : AppCompatActivity() {
 
                 val unit = parent?.selectedItem
                 spinnerFromAdapter.remove(unit.toString())
-
-                for (i in 0..<spinnerFromAdapter.count) {
-                    Log.v(TAG, "Inside spinnerTo To, Items: ${spinnerToAdapter.getItem(i)}")
-                    Log.v(TAG, "Inside spinnerTo From, Items: ${spinnerFromAdapter.getItem(i)}")
-                }
             }
 
             override fun onNothingSelected(parent: AdapterView<*>?) {
