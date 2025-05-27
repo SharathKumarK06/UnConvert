@@ -6,4 +6,6 @@
     <string name="from_hint">Enter value</string>
     <string name="to_hint">Enter value</string>
     <string name="calculate_btn">Calculate</string>
+    <string name="error_no_input">Error! You need to enter a value to convert!!!</string>
+    <string name="error_invalid_input">Error! You need to enter a number to convert!!!</string>
 </resources>
