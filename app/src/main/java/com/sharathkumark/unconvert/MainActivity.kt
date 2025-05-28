@@ -20,7 +20,7 @@ import kotlin.time.times
 class MainActivity : AppCompatActivity() {
     val TAG: String = "UNCONVERT"
 
-    private val dimensions_table = mapOf(
+    private val dimensionsTable = mapOf(
         "Length" to mapOf(
             "Kilometre" to 1.0,
             "Metre" to 1000.0,
@@ -57,7 +57,9 @@ class MainActivity : AppCompatActivity() {
         lateinit var spinnerFromAdapter: ArrayAdapter<String>
         lateinit var spinnerToAdapter: ArrayAdapter<String>
         // Units list for both form and to spinners to access
-        lateinit var units: MutableList<String>
+//        var units: MutableList<String> = mutableListOf()
+        var previousFromUnit: Int = -1
+        var previousToUnit: Int = -1
 
         // Textview for error message
         val tvError = findViewById<TextView>(R.id.tvError)
@@ -76,7 +78,7 @@ class MainActivity : AppCompatActivity() {
         ArrayAdapter(
             this,
             android.R.layout.simple_spinner_item,
-            dimensions_table.keys.toList()
+            dimensionsTable.keys.toList()
         ).also {
             adapter ->
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
@@ -87,13 +89,13 @@ class MainActivity : AppCompatActivity() {
         spinnerDimensions.onItemSelectedListener = object: AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, pos: Int, id: Long) {
                 // get dimensions
-                val dimensions = dimensions_table[parent?.getItemAtPosition(pos)]!!
+                val dimensions = dimensionsTable[parent?.getItemAtPosition(pos)]!!
 
                 // to store the user's choices of spinners for calculation
                 unit_sets["dimensions"] = parent?.getItemAtPosition(pos).toString()
 
                 // to make units list of specific dimension available for spinnerFrom and spinnerTo
-                units = dimensions.keys.toMutableList()
+//                units = dimensions.keys.toMutableList()
 
                 // ArrayAdapter for spinnerFrom
                 spinnerFromAdapter = ArrayAdapter(
@@ -103,6 +105,9 @@ class MainActivity : AppCompatActivity() {
                 )
                 spinnerFromAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
                 spinnerFrom.adapter = spinnerFromAdapter
+                // Set default selection to next item
+                previousFromUnit = 0
+                spinnerFrom.setSelection(previousFromUnit)
 
                 // ArrayAdapter for spinnerTo
                 spinnerToAdapter = ArrayAdapter(
@@ -112,6 +117,9 @@ class MainActivity : AppCompatActivity() {
                 )
                 spinnerToAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
                 spinnerTo.adapter = spinnerToAdapter
+                // Set default selection to next item
+                previousToUnit = 1
+                spinnerTo.setSelection(previousToUnit)
             }
 
             override fun onNothingSelected(parent: AdapterView<*>?) {
@@ -119,20 +127,17 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-//        TODO("Remove the current remove same unit in both side.")
-//        TODO("And add, if right side selected same unit as left side, then right side chooses the selected unit and left side remove the unit and chooses the next unit")
-
-        // onItemSelectedListener for spinnerFrom
         spinnerFrom.onItemSelectedListener = object: AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, pos: Int, id: Long) {
-                // Clear list and re add all units
-                spinnerToAdapter.clear()
-                spinnerToAdapter.addAll(units)
-
-                val unit = parent?.selectedItem
-                spinnerToAdapter.remove(unit.toString())
-
-                unit_sets["from"] = unit.toString()
+                val unit = parent?.selectedItem.toString()
+                // If currently selected unit in "From" same as "To", set "To" unit as previous
+                // "From" unit
+                if (unit == spinnerTo.selectedItem.toString() && previousFromUnit != -1) {
+                    spinnerTo.setSelection(previousFromUnit)
+                }
+                previousFromUnit = pos
+                // Set "From" unit to unit_sets for recording user selection for calculateion
+                unit_sets["from"] = unit
             }
 
             override fun onNothingSelected(parent: AdapterView<*>?) {
@@ -143,14 +148,15 @@ class MainActivity : AppCompatActivity() {
         // onItemSelectedListener for spinnerTo
         spinnerTo.onItemSelectedListener = object: AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, pos: Int, id: Long) {
-                // Clear list and re add all units
-                spinnerFromAdapter.clear()
-                spinnerFromAdapter.addAll(units)
-
-                val unit = parent?.selectedItem
-                spinnerFromAdapter.remove(unit.toString())
-
-                unit_sets["to"] = unit.toString()
+                val unit = parent?.selectedItem.toString()
+                // If currently selected unit in "To" same as "From", set "From" unit as previous
+                // "To" unit
+                if (unit == spinnerFrom.selectedItem.toString() && previousToUnit != -1) {
+                    spinnerFrom.setSelection(previousToUnit)
+                }
+                previousToUnit = pos
+                // Set "To" unit to unit_sets for recording user selection for calculateion
+                unit_sets["to"] = unit
             }
 
             override fun onNothingSelected(parent: AdapterView<*>?) {
@@ -179,10 +185,10 @@ class MainActivity : AppCompatActivity() {
 
     private fun calculateEquivalent(from: Double, unit_sets: MutableMap<String, String>): Double {
 //        Log.v(TAG, "Input: ${unit_sets}")
-//        Log.v(TAG, "Dimensions: ${dimensions_table[unit_sets["dimensions"]]}")
+//        Log.v(TAG, "Dimensions: ${dimensionsTable[unit_sets["dimensions"]]}")
 //        Log.v(TAG, "${}")
-        val fromFactor = dimensions_table[unit_sets["dimensions"]]!![unit_sets["from"]]!!
-        val toFactor = dimensions_table[unit_sets["dimensions"]]!![unit_sets["to"]]!!
+        val fromFactor = dimensionsTable[unit_sets["dimensions"]]!![unit_sets["from"]]!!
+        val toFactor = dimensionsTable[unit_sets["dimensions"]]!![unit_sets["to"]]!!
         val to = (from * toFactor)/fromFactor
         return to
     }
