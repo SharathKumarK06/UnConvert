@@ -1,7 +1,6 @@
 package com.sharathkumark.unconvert
 
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
@@ -65,7 +64,6 @@ class MainActivity : AppCompatActivity() {
             "Knot" to 1.9438,
         )
     )
-    val x = 1e+6
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
