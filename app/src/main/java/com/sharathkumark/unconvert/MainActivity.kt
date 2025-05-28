@@ -1,6 +1,7 @@
 package com.sharathkumark.unconvert
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
@@ -120,9 +121,6 @@ class MainActivity : AppCompatActivity() {
                 // to store the user's choices of spinners for calculation
                 inputUnitSet["dimensions"] = parent?.getItemAtPosition(pos).toString()
 
-                // to make units list of specific dimension available for spinnerFrom and spinnerTo
-//                units = dimensions.keys.toMutableList()
-
                 // ArrayAdapter for spinnerFrom
                 spinnerFromAdapter = ArrayAdapter(
                     applicationContext,
@@ -202,13 +200,14 @@ class MainActivity : AppCompatActivity() {
                     return
                 }
 
+                // Clear error text
+                tvError.text = null
+
                 fromValue = etFrom.text.toString().toDouble()
                 toValue = calculateEquivalent(fromValue!!, inputUnitSet)
                 etTo.setText(toValue.toString())
             }
         })
-
-        // TODO("Remove error message when focus edittext or select item in spinner or button click
     }
 
     private fun calculateEquivalent(from: Double, inputUnitSet: MutableMap<String, String>): Double {
