@@ -56,8 +56,6 @@ class MainActivity : AppCompatActivity() {
         // ArrayAdapter for data manipulation dynamically
         lateinit var spinnerFromAdapter: ArrayAdapter<String>
         lateinit var spinnerToAdapter: ArrayAdapter<String>
-        // Units list for both form and to spinners to access
-//        var units: MutableList<String> = mutableListOf()
         var previousFromUnit: Int = -1
         var previousToUnit: Int = -1
 
@@ -72,7 +70,7 @@ class MainActivity : AppCompatActivity() {
         var toValue: Double? = 0.0
 
         // user's choices for calculation
-        var unit_sets = mutableMapOf<String, String>()
+        var inputUnitSet = mutableMapOf<String, String>()
 
         // Create an ArrayAdapter using the string array and a default spinnerDimensions layout.
         ArrayAdapter(
@@ -92,7 +90,7 @@ class MainActivity : AppCompatActivity() {
                 val dimensions = dimensionsTable[parent?.getItemAtPosition(pos)]!!
 
                 // to store the user's choices of spinners for calculation
-                unit_sets["dimensions"] = parent?.getItemAtPosition(pos).toString()
+                inputUnitSet["dimensions"] = parent?.getItemAtPosition(pos).toString()
 
                 // to make units list of specific dimension available for spinnerFrom and spinnerTo
 //                units = dimensions.keys.toMutableList()
@@ -136,8 +134,8 @@ class MainActivity : AppCompatActivity() {
                     spinnerTo.setSelection(previousFromUnit)
                 }
                 previousFromUnit = pos
-                // Set "From" unit to unit_sets for recording user selection for calculateion
-                unit_sets["from"] = unit
+                // Set "From" unit to inputUnitSet for recording user selection for calculateion
+                inputUnitSet["from"] = unit
             }
 
             override fun onNothingSelected(parent: AdapterView<*>?) {
@@ -155,8 +153,8 @@ class MainActivity : AppCompatActivity() {
                     spinnerFrom.setSelection(previousToUnit)
                 }
                 previousToUnit = pos
-                // Set "To" unit to unit_sets for recording user selection for calculateion
-                unit_sets["to"] = unit
+                // Set "To" unit to inputUnitSet for recording user selection for calculateion
+                inputUnitSet["to"] = unit
             }
 
             override fun onNothingSelected(parent: AdapterView<*>?) {
@@ -177,18 +175,18 @@ class MainActivity : AppCompatActivity() {
                 }
 
                 fromValue = etFrom.text.toString().toDouble()
-                toValue = calculateEquivalent(1.0, unit_sets)
+                toValue = calculateEquivalent(1.0, inputUnitSet)
                 etTo.setText(toValue.toString())
             }
         })
     }
 
-    private fun calculateEquivalent(from: Double, unit_sets: MutableMap<String, String>): Double {
-//        Log.v(TAG, "Input: ${unit_sets}")
-//        Log.v(TAG, "Dimensions: ${dimensionsTable[unit_sets["dimensions"]]}")
+    private fun calculateEquivalent(from: Double, inputUnitSet: MutableMap<String, String>): Double {
+//        Log.v(TAG, "Input: ${inputUnitSet}")
+//        Log.v(TAG, "Dimensions: ${dimensionsTable[inputUnitSet["dimensions"]]}")
 //        Log.v(TAG, "${}")
-        val fromFactor = dimensionsTable[unit_sets["dimensions"]]!![unit_sets["from"]]!!
-        val toFactor = dimensionsTable[unit_sets["dimensions"]]!![unit_sets["to"]]!!
+        val fromFactor = dimensionsTable[inputUnitSet["dimensions"]]!![inputUnitSet["from"]]!!
+        val toFactor = dimensionsTable[inputUnitSet["dimensions"]]!![inputUnitSet["to"]]!!
         val to = (from * toFactor)/fromFactor
         return to
     }
