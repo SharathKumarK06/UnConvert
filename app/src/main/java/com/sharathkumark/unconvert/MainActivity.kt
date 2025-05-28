@@ -1,7 +1,6 @@
 package com.sharathkumark.unconvert
 
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
@@ -9,17 +8,13 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.Spinner
 import android.widget.TextView
-import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import kotlin.time.times
 
 
 class MainActivity : AppCompatActivity() {
-    val TAG: String = "UNCONVERT"
-
     private val dimensionsTable = mapOf(
         "Length" to mapOf(
             "Kilometre" to 1.0,
@@ -66,11 +61,11 @@ class MainActivity : AppCompatActivity() {
         val etFrom = findViewById<EditText>(R.id.etFrom)
         val etTo = findViewById<EditText>(R.id.etTo)
         val btnCalculate = findViewById<Button>(R.id.btnCalculate)
-        var fromValue: Double? = 0.0
-        var toValue: Double? = 0.0
+        var fromValue: Double?
+        var toValue: Double?
 
         // user's choices for calculation
-        var inputUnitSet = mutableMapOf<String, String>()
+        val inputUnitSet = mutableMapOf<String, String>()
 
         // Create an ArrayAdapter using the string array and a default spinnerDimensions layout.
         ArrayAdapter(
@@ -134,7 +129,7 @@ class MainActivity : AppCompatActivity() {
                     spinnerTo.setSelection(previousFromUnit)
                 }
                 previousFromUnit = pos
-                // Set "From" unit to inputUnitSet for recording user selection for calculateion
+                // Set "From" unit to inputUnitSet for recording user selection for calculation
                 inputUnitSet["from"] = unit
             }
 
@@ -153,7 +148,7 @@ class MainActivity : AppCompatActivity() {
                     spinnerFrom.setSelection(previousToUnit)
                 }
                 previousToUnit = pos
-                // Set "To" unit to inputUnitSet for recording user selection for calculateion
+                // Set "To" unit to inputUnitSet for recording user selection for calculation
                 inputUnitSet["to"] = unit
             }
 
@@ -175,16 +170,13 @@ class MainActivity : AppCompatActivity() {
                 }
 
                 fromValue = etFrom.text.toString().toDouble()
-                toValue = calculateEquivalent(1.0, inputUnitSet)
+                toValue = calculateEquivalent(fromValue!!, inputUnitSet)
                 etTo.setText(toValue.toString())
             }
         })
     }
 
     private fun calculateEquivalent(from: Double, inputUnitSet: MutableMap<String, String>): Double {
-//        Log.v(TAG, "Input: ${inputUnitSet}")
-//        Log.v(TAG, "Dimensions: ${dimensionsTable[inputUnitSet["dimensions"]]}")
-//        Log.v(TAG, "${}")
         val fromFactor = dimensionsTable[inputUnitSet["dimensions"]]!![inputUnitSet["from"]]!!
         val toFactor = dimensionsTable[inputUnitSet["dimensions"]]!![inputUnitSet["to"]]!!
         val to = (from * toFactor)/fromFactor
