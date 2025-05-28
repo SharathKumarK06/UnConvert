@@ -20,18 +20,51 @@ class MainActivity : AppCompatActivity() {
             "Kilometre" to 1.0,
             "Metre" to 1000.0,
             "Centimetre" to 100000.0,
+            "Millimetre" to 1e+6,
+            "Micrometre" to 1e+9,
+            "Nanometre" to 1e+12,
+            "Mile" to 0.6214,
+            "Yard" to 1093.6100,
+            "Foot" to 3280.8400,
+            "Inch" to 39370.1000,
+            "Nautical mile" to 0.5400,
         ),
         "Time" to mapOf(
-            "Second" to 3600.0,
-            "Minute" to 60.0,
-            "Hour" to 1.0,
+            "Nanosecond" to 3.154e+18,
+            "Microsecond" to 3.154e+15,
+            "Millisecond" to 3.154e+12,
+            "Second" to 3.154e+9,
+            "Minute" to 5.256e+7,
+            "Hour" to 876000,
+            "Day" to 36500,
+            "Week" to 5214.29,
+            "Month" to 1199.9997,
+            "Calendar year" to 100.0,
+            "Decade" to 10.0,
+            "Century" to 1.0,
         ),
         "Mass" to mapOf(
             "Tonne" to 1.0,
             "Kilogram" to 1000.0,
-            "Gram" to 1000000.0,
+            "Gram" to 1e+6,
+            "Milligram" to 1e+9,
+            "Microgram" to 1e+12,
+            "Imperial ton" to 0.9842,
+            "US ton" to 1.1023,
+            "Stone" to 157.4729,
+            "Stone" to 157.4729,
+            "Pound" to 2204.6200,
+            "Ounce" to 35273.9200,
         ),
+        "Speed" to mapOf(
+            "Metre per second" to 1.0,
+            "Kilometre per second" to 3.6,
+            "Mile per hour" to 2.2370,
+            "Foot per hour" to 3.2808,
+            "Knot" to 1.9438,
+        )
     )
+    val x = 1e+6
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -174,11 +207,13 @@ class MainActivity : AppCompatActivity() {
                 etTo.setText(toValue.toString())
             }
         })
+
+        // TODO("Remove error message when focus edittext or select item in spinner or button click
     }
 
     private fun calculateEquivalent(from: Double, inputUnitSet: MutableMap<String, String>): Double {
-        val fromFactor = dimensionsTable[inputUnitSet["dimensions"]]!![inputUnitSet["from"]]!!
-        val toFactor = dimensionsTable[inputUnitSet["dimensions"]]!![inputUnitSet["to"]]!!
+        val fromFactor: Double = dimensionsTable[inputUnitSet["dimensions"]]!![inputUnitSet["from"]] as Double
+        val toFactor: Double = dimensionsTable[inputUnitSet["dimensions"]]!![inputUnitSet["to"]] as Double
         val to = (from * toFactor)/fromFactor
         return to
     }
